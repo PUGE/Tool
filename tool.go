@@ -16,3 +16,11 @@ func GetRandomString(l int) string {
 	}
 	return string(result)
 }
+
+// RandInt64 生成指定区间的随机数
+func RandInt64(min, max int64) int64 {
+	if min >= max || max == 0 {
+		return max
+	}
+	return rand.Int63n(max-min) + min
+}
