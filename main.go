@@ -1,8 +1,13 @@
 package tool
 
 import (
+	"bytes"
+	"fmt"
+	"log"
 	"math/rand"
+	"os/exec"
 	"reflect"
+	"strings"
 	"time"
 )
 
@@ -42,4 +47,34 @@ func Contain(obj interface{}, target interface{}) bool {
 		}
 	}
 	return false
+}
+
+// CheckPortOccupy 检查端口是否被占用
+func CheckPortOccupy(port int) bool {
+	// 执行系统命令
+	out, err := exec.Command("netstat", "-ano").Output()
+	if err != nil {
+		log.Fatalf("exec command error: %s", err)
+	}
+	// 判断端口是否被占用
+	return strings.Contains(string(out), fmt.Sprintf(":%d", port))
+}
+
+// BytesToString Bytes转字符串
+func BytesToString(b *[]byte) *string {
+	s := bytes.NewBuffer(*b)
+	r := s.String()
+	return &r
+}
+
+// Delete 从切片中删除制定项目
+func Delete(slice *[]string, str string) {
+	temp := make([]string, len(*slice))
+	temp = *slice
+	for k, v := range temp {
+		if v == str {
+			kk := k + 1
+			*slice = append(temp[:k], temp[kk:]...)
+		}
+	}
 }
